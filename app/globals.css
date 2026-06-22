@@ -11,6 +11,22 @@
   --brand: #2563eb;
   --brand-hover: #1d4ed8;
   --brand-contrast: #ffffff;
+  --brand-dark: #1a3a8a;
+
+  /* Paleta retro (Flappy Bird) */
+  --sky: #70c5ce;
+  --sky-deep: #5ec0d6;
+  --cloud: #ffffff;
+  --ground: #ded895;
+  --ground-dark: #9b8a3c;
+  --pipe: #73bf2e;
+  --pipe-dark: #4a8a1e;
+  --pipe-light: #9be84a;
+  --pipe-border: #2d5e0f;
+  --bird: #f7d51d;
+  --bird-dark: #e0a800;
+  --bird-belly: #fff7cc;
+  --bird-beak: #ff8800;
 
   --bg: #f7f8fa;
   --surface: #ffffff;
@@ -177,3 +193,174 @@ h3 { font-size: var(--fs-xl); }
 .gap-2 { gap: var(--sp-2); } .gap-4 { gap: var(--sp-4); }
 .mt-4 { margin-top: var(--sp-4); } .w-full { width: 100%; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* =====================================================================
+ * JUEGO — tokens retro y utilidades para Flappy Bird
+ * ===================================================================== */
+
+.font-retro {
+  font-family: var(--font-retro), "Press Start 2P", monospace;
+  letter-spacing: 0.05em;
+}
+
+.text-shadow-pixel {
+  text-shadow: 2px 2px 0 var(--brand-dark), -1px -1px 0 var(--brand-dark);
+}
+
+/* Parpadeo de instrucciones */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .blink { animation: none; }
+}
+
+/* Pájaro flotando en pantalla de inicio */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.bird-logo {
+  animation: float 3s ease-in-out infinite;
+  display: flex;
+  justify-content: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bird-logo { animation: none; }
+}
+
+/* --- Canvas del juego --- */
+canvas, .game-canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  max-width: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  border: 3px solid var(--pipe-border);
+  box-shadow: var(--shadow);
+}
+
+/* --- Contenedor del juego --- */
+.game-container {
+  margin: 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Overlays (pantallas superpuestas) --- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: var(--sp-3);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-sm);
+}
+
+.overlay-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  max-width: 360px;
+  width: 100%;
+  color: #ffffff;
+}
+
+.overlay-title {
+  font-size: clamp(1.2rem, 5vw, 2rem);
+  color: #ffd700;
+  line-height: 1.3;
+}
+
+.overlay-subtitle {
+  font-size: clamp(0.55rem, 2vw, 0.75rem);
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+.overlay-hint {
+  font-size: clamp(0.5rem, 1.8vw, 0.7rem);
+  color: #ffffff;
+  line-height: 1.6;
+  text-shadow: 1px 1px 0 var(--brand-dark);
+}
+
+.overlay-record {
+  font-size: clamp(0.5rem, 1.8vw, 0.65rem);
+  color: #ffd700;
+}
+
+.overlay-score-line {
+  font-size: clamp(0.6rem, 2.5vw, 0.85rem);
+  color: #ffffff;
+}
+
+/* --- HUD (marcador durante el juego) --- */
+.hud-overlay {
+  position: absolute;
+  top: var(--sp-3);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hud-score {
+  font-size: clamp(1.5rem, 8vw, 2.5rem);
+  color: #ffffff;
+  line-height: 1;
+}
+
+.hud-badge {
+  font-size: var(--fs-xs);
+  pointer-events: none;
+}
+
+/* --- Botón de reinicio (mín 56px para móvil) --- */
+.btn-restart {
+  min-width: 56px;
+  min-height: 56px;
+  font-size: var(--fs-base);
+  font-family: var(--font-retro), "Press Start 2P", monospace;
+  padding: var(--sp-3) var(--sp-5);
+  margin-top: var(--sp-2);
+}
+
+/* --- Reset del juego: prevenir scroll en móvil --- */
+html, body {
+  overflow: hidden;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* Página principal centrada */
+.game-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-3);
+  background: var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  .game-page { background: var(--bg); }
+}
