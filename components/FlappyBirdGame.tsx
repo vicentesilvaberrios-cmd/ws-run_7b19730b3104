@@ -138,19 +138,6 @@ export default function FlappyBirdGame() {
       className="game-container"
       role="application"
       aria-label="Juego: pulsa para volar"
-      onPointerDown={(e) => {
-        e.preventDefault();
-        onInput();
-      }}
-      onTouchStart={handleTouchStart}
-      style={{
-        position: "relative",
-        width: "100%",
-        maxWidth: "480px",
-        aspectRatio: "2 / 3",
-        touchAction: "none",
-        WebkitTapHighlightColor: "transparent",
-      }}
     >
       <GameCanvas
         ref={canvasRef}

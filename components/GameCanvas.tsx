@@ -22,14 +22,12 @@ const GameCanvas = forwardRef<HTMLCanvasElement, GameCanvasProps>(
         aria-hidden="true"
         onPointerDown={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           onPointerDown();
         }}
         onTouchStart={(e) => {
           e.preventDefault();
           onTouchStart(e);
-        }}
-        style={{
-          WebkitTapHighlightColor: "transparent",
         }}
       />
     );
